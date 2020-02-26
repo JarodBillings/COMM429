@@ -1,4 +1,4 @@
-let  WebSocketServer = require('ws').server;
+let  WebSocketServer = require('websocket').server;
 const http = require('http');
 
 let server = http.createServer((req, res) => {
@@ -13,17 +13,23 @@ server.listen(9876, () =>{
 
 const wsServer = new WebSocketServer({
     httpServer: server,
-    autoAcceptConnections: false
+    autoAcceptConnections: true
 });
-
-wsServer.on("connection", (ws) => {
-    wsServer.on("message", (msg) => {
-        const userMsg = JSON.parse(msg);
-        console.log(`${msg.user} (${msg.role}) sent ${msg.text}`);
+var clients = [];
+wsServer.on("connect", (ws) => {
+    clients.push(ws);
+    ws.on("message", (msg) => {
+        const userMsg = JSON.parse(msg.utf8Data);
+        console.log(userMsg);
+        console.log(`${userMsg.user} (${userMsg.role}) sent ${userMsg.text}`);
+        let msgText;
+        if(userMsg.connect){
+            msgText = `${userMsg.user} has connected!`;
+        }else{
+            msgText = `${userMsg.user}: ${userMsg.text}`         
+        }
+        clients.forEach((c) => {
+            c.send(msgText) 
+        })
     });
-    ws.send(JSON.stringify({
-        role: -1,
-        user: "server",
-        text: "Connected to Server"
-    }));
 });
