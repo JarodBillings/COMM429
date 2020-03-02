@@ -35,7 +35,7 @@ class App extends Component {
       <div>
         {
           this.state.connect ? (
-            <ChatWindow height={1000} width={1000} />
+            <ChatWindow height={1000} width={1000} username={this.state.username} />
           ) : (
               <Fragment>
                 <p id="username-text" style={{ display: "inline" }} >username: </p>
