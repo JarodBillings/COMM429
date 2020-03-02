@@ -26,7 +26,9 @@ wsServer.on("connect", (ws) => {
         if(userMsg.connect){
             msgText = `${userMsg.user} has connected!`;
         }else{
-            msgText = `${userMsg.user}: ${userMsg.text}`         
+            const dateSent = new Date(Date.now());
+            console.log(dateSent);
+            msgText = `(${dateSent.getHours()}:${dateSent.getMinutes()}) ${userMsg.user}: ${userMsg.text}`         
         }
         clients.forEach((c) => {
             c.send(msgText) 

@@ -41,7 +41,8 @@ class ChatWindow extends Component {
             this.state.server.send(this.formatJSON({
                 user: this.props.username,
                 role: 1,
-                text: msg
+                text: msg,
+                time: Date.now()
             }));
             this.setState({
                 msg: ""
@@ -83,12 +84,18 @@ class ChatWindow extends Component {
 
                     this.state !== null ? (
                         this.state.clientMsgs.map((val, index) => {
-                            return <div>{val}</div>
+                            console.log(val);
+                            return (
+                            <div>
+                                {val}
+                                <hr />
+                            </div>
+                            )
                         })
                     ) :
                         (<div></div>)
                 }
-                <input type="text" onKeyDown={this.onKeyPress} onChange={this.onChange} value={this.state.msg}></input>
+                <input type="text" onKeyDown={this.onKeyPress} onChange={this.onChange} value={this.state.msg} style={{width: "100%"}}></input>
             </div>
 
         );
